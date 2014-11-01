@@ -275,11 +275,14 @@ on projectListWithExclusions(containingFolder)
 		tell default document
 			set theProjects to every flattened project where (name of its folder contains containingFolder) and (effectively hidden of its folder is false) and (its status is not dropped) and (its status is not done) and (its name does not contain "!exclude")
 
-			set rootFolder to item 1 of (every flattened folder where its name is containingFolder)
+			set rootFolders to every flattened folder where its name is containingFolder
 
-			repeat with aFolder in (every flattened folder where id of its container is (id of rootFolder))
-				set theProjects to theProjects & my projectListWithExclusions(name of aFolder)
-			end repeat
+			if length of rootFolders > 0 then
+				set rootFolder to item 1 of rootFolders
+				repeat with aFolder in (every flattened folder where id of its container is (id of rootFolder))
+					set theProjects to theProjects & my projectListWithExclusions(name of aFolder)
+				end repeat
+			end if
 
 			return theProjects
 		end tell
